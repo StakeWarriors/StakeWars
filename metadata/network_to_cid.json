@@ -1,0 +1,27 @@
+{
+    "development":{
+        "current_edition": 0,
+        "group_uris": {}
+    },
+    "kovan": {
+        "current_edition": 0,
+        "group_uris": {}
+    },
+    "mumbai_moralis": {
+        "current_edition": 0,
+        "group_uris": {}
+    },
+    "rinkeby": {
+        "current_edition": 0,
+        "group_uris": {
+        }
+    },
+    "polygon-main": {
+        "current_edition": 0,
+        "group_uris": {}
+    },
+    "mainnet": {
+        "current_edition": 0,
+        "group_uris": {}
+    }
+}

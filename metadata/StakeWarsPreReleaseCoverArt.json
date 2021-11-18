@@ -1,0 +1,24 @@
+{
+  "name": "Stake Wars PreRelease Cover Art",
+  "description": "This cover art will be replace when these NFTs are released with a unique character, that will have a variety of traits and characteristics. This ERC-721 metadata is composed of two contracts, StakeWarriorsFactory and StakeWarriorCharacter. In order to mint/buy a new warrior head over to the Factory contracts. To look at the warrior's stats checkout the StakeWarrior Character Contract. Do note some properties of the warrior token will be unavailable until the official release of the tokens.",
+  "image": "https://ipfs.io/ipfs/QmPXGewyFjdcVLqLhwFQqi3wtiT9447Sk3YTT7ATRLZUvy/?filename=StakeWarsPreReleaseCoverArt.png",
+  "external_url": "https://twitter.com/StakeWarriors",
+  "attributes": [
+    { "trait_type": "Edition", "display_type": "number", "value": -1 },
+    { "trait_type": "Rarity", "value": "Unranked" },
+    { "trait_type": "Rarity Level", "value": -1 },
+    {
+      "trait_type": "Character Bio",
+      "value": "Example Warrior Bio."
+    },
+    { "trait_type": "Base Class", "value": "Fighter" },
+    { "trait_type": "Base Land", "value": "Norvak" },
+    {
+      "trait_type": "Intelligence",
+      "display_type": "boost_percentage",
+      "value": 0.5
+    },
+    { "trait_type": "Trait", "value": "Brave" },
+    { "trait_type": "Trait", "value": "Caring" }
+  ]
+}

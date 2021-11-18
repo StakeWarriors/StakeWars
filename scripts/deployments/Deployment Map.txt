@@ -1,0 +1,45 @@
+____________________________________________
+|                                           |
+|               Phase One                   |
+|___________________________________________|
+
+Deploy StakeWarsFactory.sol
+    - Link Fund the Seed
+    - Provide Secret
+Deploy StakeWarsCharacter.sol
+    - Provide Secret
+____________________________________________
+|                                           |
+|               Phase Two                   |
+|___________________________________________|
+
+Master Account reserves his own tokens
+____________________________________________
+|                                           |
+|              Phase Three                  |
+|___________________________________________|
+
+Prep + Create Metadata for token
+    - Ensure that Default Token is correct
+____________________________________________
+|                                           |
+|               Phase Four                  |
+|___________________________________________|
+
+Publicized NFT Sale
+Toggle Sale Active
+Queue Launch Window
+____________________________________________
+|                                           |
+|               Phase Five                  |
+|___________________________________________|
+
+Close Sales
+Prep + Create Metadata 
+____________________________________________
+|                                           |
+|               Phase Six                   |
+|___________________________________________|
+
+Launch NFTs 
+    - Set BaseURL to the Network Folder 

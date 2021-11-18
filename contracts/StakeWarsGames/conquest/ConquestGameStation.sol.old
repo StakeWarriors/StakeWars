@@ -1,0 +1,119 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
+import "../../vendor/openzeppelin/ERC1155.sol";
+import "../../interfaces/IStakeWarsInternals.sol";
+import "../../vendor/upgradeable/openzeppelin/access/AccessControlUpgradeable.sol";
+import "../../StakeWarsFactoryUpgradable.sol";
+
+// player1Seeds=[1234567890,0987654321]
+// player2Seeds=[6789012345,5432109876]
+contract contractConquerFactory is ERC1155, AccessControlUpgradeable {
+    struct GameSettings {
+        uint256 gameId;
+        address[] playerOneWarriors;
+        address[] playerTwoWarriors;
+    }
+
+    address public proxyAddr;
+    uint256 private _gameCounter;
+    mapping(address => bool) public licensedPlayer;
+    mapping(uint256 => GameSettings) public game;
+
+    uint256 public LicensePrice = 5 ether; //Matic $10
+    event GameDeclaration(
+        uint8 matchupSize,
+        uint256 gameId,
+        address playerOne,
+        address playerTwo
+    );
+    event GameCreated();
+    uint8 public matchupSizeLimit;
+
+    // mapping (address
+    constructor() ERC1155("") {
+        licensedPlayer[msg.sender] = true;
+    }
+
+    function GetBoardTypes() public view returns (uint256[][][] memory) {}
+
+    function PrivateDeclareGame(
+        uint8 matchupSize,
+        address[] memory warrior,
+        address playerTwo
+    ) public hasLicensed returns (uint256) {
+        require(
+            warrior.length == matchupSize && matchupSize <= matchupSizeLimit
+        );
+        _gameCounter++;
+        emit GameDeclaration(matchupSize, _gameCounter, msg.sender, playerTwo);
+        return _gameCounter;
+    }
+
+    function PublicDeclareGame(uint8 matchupSize, address[] memory warrior)
+        public
+        hasLicensed
+        returns (uint256)
+    {
+        require(
+            warrior.length == matchupSize && matchupSize <= matchupSizeLimit
+        );
+        _gameCounter++;
+
+        emit GameDeclaration(matchupSize, _gameCounter, msg.sender, address(0));
+        return _gameCounter;
+    }
+
+    // Would have to collect these Wagered Items
+    function InitializeWageredGame(
+        address[] memory mineWager,
+        address[] memory yourWager
+    ) public hasLicensed {}
+
+    function ClaimPlayerTwoSlot(uint256 gameId, address[] memory warrior)
+        public
+        hasLicensed
+    {}
+
+    // Confirm Wagered item
+    function AcceptWager() public {}
+
+    function BuyLicensed() public payable {
+        require(LicensePrice == msg.value, "Ether value sent is not correct");
+        licensedPlayer[msg.sender] = true;
+    }
+
+    modifier hasLicensed() {
+        require(licensedPlayer[msg.sender], "You must buy a license first");
+        _;
+    }
+
+    function _withdraw() public {
+        payable(msg.sender).transfer(address(this).balance);
+    }
+
+    function _setPrice(uint256 newPrice) public {
+        LicensePrice = newPrice;
+    }
+
+    function _setMatchupSizeLimit(uint8 _matchupSizeLimit) public {
+        matchupSizeLimit = _matchupSizeLimit;
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC1155, AccessControlUpgradeable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    modifier userMustOwnWarrior(address warrior) {
+        require(
+            StakeWarsFactoryUpgradable(proxyAddr).ownerOf(
+                IStakeWarsInternals(warrior).tokenId()
+            ) == msg.sender
+        );
+        _;
+    }
+}
