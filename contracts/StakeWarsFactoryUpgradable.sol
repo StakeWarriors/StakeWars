@@ -21,14 +21,13 @@ contract StakeWarsFactoryUpgradable is
     uint256 public MaxSupply;
     uint256 public Price; //Matic
     uint256 public Edition;
-    string[] public baseURI;
     string public defaultURI;
 
     bool public SaleActive;
     bool public PresaleActive;
-    uint256 public _uriGroup;
-    uint256 public _providedSeed;
+    uint256 internal _providedSeed;
 
+    string[] private baseURI;
     uint256[] private _securityKey;
 
     address public crowdSafe;
@@ -64,7 +63,6 @@ contract StakeWarsFactoryUpgradable is
         Price = 10 ether; // Matic
         SaleActive = false;
         PresaleActive = false;
-        _uriGroup = 0;
         _securityKey.push(securityKey);
         requestRandomness(keyhash, linkFee, securityKey);
     }
@@ -125,7 +123,7 @@ contract StakeWarsFactoryUpgradable is
             Edition,
             randomness,
             _tokenIdsGen,
-            _uriGroup,
+            baseURI.length,
             secret
         );
 
@@ -170,7 +168,7 @@ contract StakeWarsFactoryUpgradable is
         public
         onlyAdminOrGC
     {
-        require(uriGroupIndex <= _uriGroup);
+        require(uriGroupIndex <= baseURI.length);
         while (baseURI.length <= uriGroupIndex) {
             baseURI.push(defaultURI);
         }
@@ -221,7 +219,7 @@ contract StakeWarsFactoryUpgradable is
         StakeWarsInternals thisWarrior = tokenIdToStakeWarrior[_tokenId];
         uint256 myUriGroup = thisWarrior.uriGroup();
         uint256 myEdition = thisWarrior.edition();
-        if (myUriGroup < _uriGroup && myEdition < Edition) {
+        if (myUriGroup < baseURI.length && myEdition < Edition) {
             return
                 string(
                     abi.encodePacked(
@@ -262,6 +260,14 @@ contract StakeWarsFactoryUpgradable is
         return string(bstr);
     }
 
+    function getBaseURI() public view onlyAdminOrGC returns (string[] memory) {
+        return baseURI;
+    }
+
+    function getBaseURILength() public view onlyAdminOrGC returns (uint256) {
+        return baseURI.length;
+    }
+
     function GetMyTokenWallet(address owner)
         public
         view
@@ -297,7 +303,6 @@ contract StakeWarsFactoryUpgradable is
 
     function _resetWarriorsToBeDetails() public {
         delete warriorsToBeDetailed;
-        _uriGroup++;
     }
 
     function _withdraw() public onlyRole(DEFAULT_ADMIN_ROLE) {

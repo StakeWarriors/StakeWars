@@ -2,6 +2,7 @@ import os
 from brownie import (
     StakeWarsFactoryUpgradable,
     StakeWarsCharacterUpgradable,
+    VRFCoordinatorMock,
     config,
     network,
 )
@@ -19,10 +20,9 @@ from scripts.helpful_scripts import (
 )
 
 load_dotenv()
-TOKENS_TO_MINT = 1
 
 
-def deployStakeWarsFactoryUpgradable(totalSupply, account=None):
+def deploy_swfu(totalSupply, account=None):
     account = account if account else get_account()
     name = "StakeWars"
     symbol = "5WARS"
@@ -69,7 +69,7 @@ def deployStakeWarsFactoryUpgradable(totalSupply, account=None):
     return stakewars_factory
 
 
-def deployStakeWarsCharacterUpgradable(account=None):
+def deploy_swcu(account=None):
     account = account if account else get_account()
     _securityKey = os.getenv("SECRET_LARGE_PRODUCT")
     stakewars_character = StakeWarsCharacterUpgradable.deploy(
@@ -103,7 +103,7 @@ def main():
     master_account = get_account()
     (redeploySWF, redeploySWC) = prompt()
     if redeploySWC:
-        deployStakeWarsCharacterUpgradable(master_account)
+        deploy_swcu(master_account)
     if redeploySWF:
-        deployStakeWarsFactoryUpgradable(100, master_account)
+        deploy_swfu(100, master_account)
     print_weblink()

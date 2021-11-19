@@ -1,16 +1,17 @@
 from brownie import (
-    StakeWarsFactory,
+    StakeWarsFactoryUpgradable,
     Contract,
     StakeWarsInternals,
 )
 from scripts.deployments.stakewars_helper import archive_tokens_to_metadata
 
 from scripts.file_functions import read_archived_tokens, update_archived_tokens
-from tests.integration.test_util import setup_prep
+from scripts.helpful_scripts import get_account
+from tests.offline.test_util import setup_prep
 
 
 def get_tokens():
-    stake_wars = StakeWarsFactory[-1]
+    stake_wars = StakeWarsFactoryUpgradable[-1]
     tokens = []
     numOwnedWarriors = stake_wars.warriorsToBeDetailedLength()
     for warriorIndex in range(numOwnedWarriors):
@@ -25,7 +26,9 @@ def get_tokens():
 def test_archiving():
     # Prep
     setup_prep()
-    # Has to be local because _reserve requires _providedSeed
+    swf = StakeWarsFactoryUpgradable[-1]
+    swf._reserve({"from": get_account()}).wait(1)
+
     update_archived_tokens([])
     tokens = get_tokens()
 

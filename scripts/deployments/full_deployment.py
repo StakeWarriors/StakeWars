@@ -1,7 +1,7 @@
 from brownie import ZERO_ADDRESS, StakeWarsFactory, StakeWarsCharacter
 import time
 from scripts.deployments.create_collection import save_collection
-from scripts.deployments.deploy import (
+from scripts.deployments.new_deploy import (
     deployStakeWarsCharacter,
     deployStakeWarsFactory,
 )

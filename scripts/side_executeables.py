@@ -1,19 +1,12 @@
 import os
-import time
 import json
-import brownie
 from dotenv import load_dotenv
 
-from brownie import StakeWarsFactory, StakeWarsCharacter
-from PIL import Image
-import matplotlib.pyplot as plt
 
-from scripts.deployments.deploy import deployStakeWarsCharacter, deployStakeWarsFactory
 from scripts.file_functions import number_of_gifs, rename_gifs
-from scripts.helpful_scripts import get_account, is_local, page_open
 from scripts.ipfs_functions import upload_to_ipfs_client
 from metadata.template_metadata import metadata_template
-from scripts.ipfs_rarity.colors import colorize, create_variant
+from scripts.ipfs_rarity.colors import create_variant
 from scripts.ipfs_rarity.name_generator import fantasy_name
 
 load_dotenv()
