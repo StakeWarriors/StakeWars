@@ -8,6 +8,7 @@ from brownie import (
     LinkToken,
     Contract,
 )
+import eth_utils
 import webbrowser
 
 FORKED_LOCAL_ENVIRONMENTS = ["mainnet-fork", "mainnet-fork-dev"]
@@ -23,11 +24,19 @@ ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 contract_to_mock = {
     "vrf_coordinator": VRFCoordinatorMock,
     "link_token": LinkToken,
+    "StakeWarsCharacterUpgradable": StakeWarsCharacterUpgradable,
+    "StakeWarsFactoryUpgradable": StakeWarsFactoryUpgradable,
 }
 
 
 def get_address(address):
     return config["networks"][network.show_active()][address]
+
+
+def encode_function_data(initializer=None, *args):
+    if len(args) == 0 or not initializer:
+        return eth_utils.to_bytes(hexstr="0x")
+    return initializer.encode_input(*args)
 
 
 def deploy_mocks(decimals=DECIMALS, starting_price=STARTING_PRICE):
@@ -102,7 +111,7 @@ def page_open(Contract):
         )
 
 
-def print_weblink():
+def print_weblink(proxy_stakewars_character, proxy_stakewars_factory):
     if not is_local():
         if network.show_active() in POLY_BLOCKCHAIN_ENVIRONMENTS:
             prefix = ""
@@ -110,10 +119,10 @@ def print_weblink():
                 prefix = "mumbai."
             # Running this command without deploying will show most recent deployments
             print(
-                f"https://{prefix}polygonscan.com/address/{StakeWarsFactoryUpgradable[-1].address}"
+                f"StakeWars Character = https://{prefix}polygonscan.com/address/{proxy_stakewars_character.address}"
             )
             print(
-                f"https://{prefix}polygonscan.com/address/{StakeWarsCharacterUpgradable[-1].address}"
+                f"StakeWars Factory = https://{prefix}polygonscan.com/address/{proxy_stakewars_factory.address}"
             )
         else:
             prefix = ""
@@ -121,8 +130,8 @@ def print_weblink():
                 prefix = f"{network.show_active()}."
             # Running this command without deploying will show most recent deployments
             print(
-                f"https://{prefix}etherscan.io/address/{StakeWarsFactoryUpgradable[-1].address}"
+                f"StakeWars Character = https://{prefix}etherscan.io/address/{proxy_stakewars_character.address}"
             )
             print(
-                f"https://{prefix}etherscan.io/address/{StakeWarsCharacterUpgradable[-1].address}"
+                f"StakeWars Factory = https://{prefix}etherscan.io/address/{proxy_stakewars_factory.address}"
             )

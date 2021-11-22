@@ -11,7 +11,7 @@ def reset():
     clean_directory()
     update_dictionary([])
     update_archived_tokens([])
-    update_edition(1)
+    update_edition(0)
     move_used_img_back()
 
 

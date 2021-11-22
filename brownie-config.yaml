@@ -31,6 +31,7 @@ networks:
     crowd_safe_proxy: "0x173b5dAE7c054A7B01F039f872B775cE1282C1d4"
     active_account: "from_blue_key"
     verify: False
+    total_supply: 20
   kovan:
     link_token: "0xa36085F69e2889c224210F603D836748e7dC0088"
     vrf_coordinator: "0xdD3782915140c8f3b190B5D67eAc6dc5760C46E9"
@@ -45,6 +46,7 @@ networks:
     keyhash: "0xf86195cf7690c55907b2b611ebb7343a6f649bff128701cc542f0569e2c549da"
     crowd_safe_proxy: "0x28B97a68D53cfBEa6313b588255af4F53a0A7754"
     active_account: "from_red_key"
+    total_supply: 700
 wallets:
   from_blue_key: ${WALLET_PRIVATE_KEY_BLUE}
   from_green_key: ${WALLET_PRIVATE_KEY_GREEN}

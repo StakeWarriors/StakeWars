@@ -1,5 +1,5 @@
 {
-    "development":{
+    "development": {
         "current_edition": 0,
         "group_uris": {}
     },
@@ -7,20 +7,19 @@
         "current_edition": 0,
         "group_uris": {}
     },
-    "mumbai_moralis": {
+    "mainnet": {
         "current_edition": 0,
         "group_uris": {}
     },
-    "rinkeby": {
+    "mumbai_moralis": {
         "current_edition": 0,
-        "group_uris": {
-        }
+        "group_uris": {}
     },
     "polygon-main": {
         "current_edition": 0,
         "group_uris": {}
     },
-    "mainnet": {
+    "rinkeby": {
         "current_edition": 0,
         "group_uris": {}
     }
