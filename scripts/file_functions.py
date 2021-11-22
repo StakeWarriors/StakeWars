@@ -4,6 +4,8 @@ import os
 import json
 import random
 
+from scripts.helpful_scripts import is_mainnet
+
 
 NFT_IMAGES_DIR = "./img/gif/"
 
@@ -33,16 +35,18 @@ def get_any_character():
 
 
 def move_to_used(character_file_name):
-    old_path = f"{NFT_IMAGES_DIR}{character_file_name}.gif"
-    new_path = f"./img/used_gifs/{character_file_name}.gif"
-    os.rename(old_path, new_path)
+    if is_mainnet():
+        old_path = f"{NFT_IMAGES_DIR}{character_file_name}.gif"
+        new_path = f"./img/used_gifs/{character_file_name}.gif"
+        os.rename(old_path, new_path)
 
 
 def move_used_img_back():
-    for f in os.listdir("./img/used_gifs/"):
-        old_path = f"./img/used_gifs/{f}"
-        new_path = f"{NFT_IMAGES_DIR}{f}"
-        os.rename(old_path, new_path)
+    if is_mainnet():
+        for f in os.listdir("./img/used_gifs/"):
+            old_path = f"./img/used_gifs/{f}"
+            new_path = f"{NFT_IMAGES_DIR}{f}"
+            os.rename(old_path, new_path)
 
 
 def remove_extension(file_name):

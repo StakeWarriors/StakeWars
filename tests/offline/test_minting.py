@@ -1,47 +1,66 @@
-from brownie import (
-    StakeWarsFactoryUpgradable,
-    Contract,
-    StakeWarsInternals,
-)
-from scripts.deployments.stakewars_helper import archive_tokens_to_metadata
+from brownie import StakeWarsFactoryUpgradable, exceptions
+import pytest
 
-from scripts.file_functions import read_archived_tokens, update_archived_tokens
 from scripts.helpful_scripts import get_account
 from tests.offline.test_util import setup_prep
 
 
-def get_tokens():
-    stake_wars = StakeWarsFactoryUpgradable[-1]
-    tokens = []
-    numOwnedWarriors = stake_wars.warriorsToBeDetailedLength()
-    for warriorIndex in range(numOwnedWarriors):
-        warrior = stake_wars.warriorsToBeDetailed(warriorIndex)
-        character = Contract.from_abi(
-            StakeWarsInternals._name, warrior, StakeWarsInternals.abi
-        )
-        tokens.append(character.tokenId())
-    return tokens
-
-
-def test_archiving():
-    # Prep
+def test_reserve_minting_valid():
     setup_prep()
+    account = get_account()
     swf = StakeWarsFactoryUpgradable[-1]
-    swf._reserve({"from": get_account()}).wait(1)
+    # Prep
+    swf._reserve({"from": account}).wait(1)
 
-    update_archived_tokens([])
-    tokens = get_tokens()
-
-    # Test
+    tokens = list(swf.GetMyTokenWallet(account, {"from": account}))
     assert len(tokens) == 1
 
-    # Prep
-    archive_tokens_to_metadata(tokens)
-    tokens = get_tokens()
 
-    # Test
-    assert len(tokens) == 0
-    assert len(read_archived_tokens()) == 1
+def test_reserve_minting_invalid():
+    setup_prep()
+    account = get_account(index=2)
+    swf = StakeWarsFactoryUpgradable[-1]
 
-    # Revert
-    update_archived_tokens([])
+    with pytest.raises(exceptions.VirtualMachineError):
+        swf._reserve({"from": account})
+
+
+def test_presale_minting_valid():
+    setup_prep()
+    admin = get_account()
+    account = get_account(index=2)
+    swf = StakeWarsFactoryUpgradable[-1]
+    price = swf.Price()
+
+    assert swf.PresaleActive() == False
+    with pytest.raises(exceptions.VirtualMachineError):
+        swf.mintPresale({"from": account, "amount": price})
+
+    swf._togglePreSaleActive({"from": admin})
+
+    assert swf.PresaleActive() == True
+    with pytest.raises(exceptions.VirtualMachineError):
+        swf.mintPresale({"from": account, "amount": price})
+
+    swf._addPresaleWhitelist(account, 3, {"from": admin})
+    swf.mintPresale({"from": account, "amount": price})
+    swf.mintPresale({"from": account, "amount": price})
+    swf.mintPresale({"from": account, "amount": price})
+
+    with pytest.raises(exceptions.VirtualMachineError):
+        swf.mintPresale({"from": account, "amount": price})
+
+
+def test_sale_minting_valid():
+    setup_prep()
+    admin = get_account()
+    account = get_account(index=2)
+    swf = StakeWarsFactoryUpgradable[-1]
+    price = swf.Price()
+
+    assert swf.SaleActive() == False
+    with pytest.raises(exceptions.VirtualMachineError):
+        swf.mint({"from": account, "amount": price})
+    swf._toggleSaleActive({"from": admin})
+    assert swf.SaleActive() == True
+    swf.mint({"from": account, "amount": price})

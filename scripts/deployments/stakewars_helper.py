@@ -30,6 +30,8 @@ def archive_tokens_to_metadata(tokens):
     archived_tokens = read_archived_tokens()
     print(f"Archiving {len(tokens)} Token(s)")
     for token in tokens:
+        print(token)
+        print(tokens)
         archivable = {
             "tid": token["tokenId"],
             "rarity": token["attributes"][1]["value"],

@@ -51,16 +51,15 @@ def create_collection(account=None):
         )
 
         tokenId = character.tokenId()
-
         edition = character.edition()
-        if uri_group == -1:
-            uri_group = character.uriGroup()
+        uri_group = character.uriGroup()
 
         (rarity_number, rarity_index) = character.getRarity(SECRET, {"from": account})
         rarity_name = toRarityEnglish(rarity_number)
         clazz = toClassEnglish(character.clazz(0))
         land = toLandEnglish(character.land(0))
         (character_file_name, full_file_path) = get_any_character()
+
         character_name = character_file_name.replace("_", " ")
         (bios, bios_counter, super_rare_counter, rare_counter) = character_bios(
             bios_counter,

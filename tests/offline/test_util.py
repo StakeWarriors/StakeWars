@@ -11,7 +11,7 @@ from scripts.file_functions import (
     read_edition,
 )
 
-from scripts.helpful_scripts import ZERO_ADDRESS, fund_link, get_contract, get_account
+from scripts.helpful_scripts import fund_link, get_contract, get_account
 
 load_dotenv()
 TOKENS_TO_MINT = 1

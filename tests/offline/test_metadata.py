@@ -1,6 +1,10 @@
+import brownie
 import os
 from pathlib import Path
 from brownie import StakeWarsFactoryUpgradable
+
+from scripts.deployments.new_create_collection import create_collection
+from scripts.deployments.reset_deployment import reset
 from scripts.helpful_scripts import get_account
 from dotenv import load_dotenv
 
@@ -56,3 +60,40 @@ def test_get_base_uri_valid():
 
     # Test Purchase After Release
     assert stake_wars.defaultURI() == stake_wars.tokenURI(1)
+
+
+def test_generated_metadata():
+    fro = {"from": get_account()}
+    setup_prep()
+    stake_wars = StakeWarsFactoryUpgradable[-1]
+    stake_wars._reserve(fro).wait(1)
+    (tokens, uri_group) = create_collection()
+    assert uri_group == 0
+    assert len(tokens[0]["name"]) > 0
+    assert len(tokens[0]["attributes"]) > 7
+
+    assert tokens[0]["attributes"][0]["trait_type"] == "Edition"
+    assert tokens[0]["attributes"][0]["value"] == 0
+
+    assert tokens[0]["attributes"][1]["trait_type"] == "Rarity"
+    assert type(tokens[0]["attributes"][1]["value"]) == str
+    assert len(tokens[0]["attributes"][1]["value"]) > 0
+
+    assert tokens[0]["attributes"][2]["trait_type"] == "Rarity Level"
+    assert type(tokens[0]["attributes"][2]["value"]) == brownie.convert.datatypes.Wei
+
+    assert tokens[0]["attributes"][3]["trait_type"] == "Base Class"
+    assert type(tokens[0]["attributes"][3]["value"]) == str
+    assert len(tokens[0]["attributes"][3]["value"]) > 0
+
+    assert tokens[0]["attributes"][4]["trait_type"] == "Base Land"
+    assert type(tokens[0]["attributes"][4]["value"]) == str
+    assert len(tokens[0]["attributes"][4]["value"]) > 0
+
+    assert tokens[0]["attributes"][5]["trait_type"] == "Creature"
+    assert type(tokens[0]["attributes"][5]["value"]) == str
+    assert len(tokens[0]["attributes"][5]["value"]) > 0
+
+    assert tokens[0]["attributes"][6]["trait_type"] == "Intelligence"
+    assert type(tokens[0]["attributes"][6]["value"]) == int
+    reset()

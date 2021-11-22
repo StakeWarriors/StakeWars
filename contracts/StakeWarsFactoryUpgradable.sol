@@ -193,6 +193,13 @@ contract StakeWarsFactoryUpgradable is
         crowdSafe = _crowdSafe;
     }
 
+    function _addPresaleWhitelist(address reservee, uint256 amount)
+        public
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        presaleWhitelist[reservee] = amount;
+    }
+
     function _toggleSaleActive() public onlyRole(DEFAULT_ADMIN_ROLE) {
         SaleActive = !SaleActive;
     }
