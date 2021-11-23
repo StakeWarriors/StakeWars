@@ -7,7 +7,7 @@ from brownie import (
     TransparentUpgradeableProxy,
     config,
 )
-from scripts.deployments.new_deploy import deploy_swfu
+from scripts.deployments.new_deploy import deploy_swcu, deploy_swfu
 from scripts.helpful_scripts import (
     get_account,
     encode_function_data,
@@ -64,26 +64,17 @@ def migrate_character_contract():
 
 def fetch_last():
     # (proxy, proxy_admin, proxy_swfactory)=migrate_contract()
-    proxy = get_contract("TransparentUpgradeableProxy")
     proxy_admin = get_contract("ProxyAdmin")
-    proxy_swfactory = get_contract("StakeWarsCharacterUpgradable")
-    proxy_swcharacter = get_contract("StakeWarsFactoryUpgradable")
+    proxy = get_contract("TransparentUpgradeableProxy")
+    proxy_swfactory = get_contract("StakeWarsFactoryUpgradable")
+    proxy_swcharacter = get_contract("StakeWarsCharacterUpgradable")
     print_weblink()
     return proxy, proxy_admin, proxy_swfactory, proxy_swcharacter
 
 
-def test():
-    transparentupgradeableproxy = TransparentUpgradeableProxy[-1]
-    proxyadmin = ProxyAdmin[-1]
-    swfactoryv2 = StakeWarsFactoryUpgradableV2[-1]
-    swcharacterv2 = StakeWarriorsCharacterUpgradableV2[-1]
-
-    print(f"{transparentupgradeableproxy} {proxyadmin} {swfactoryv2} {swcharacterv2}")
-
-
 def main():
     (proxy, proxy_admin, proxy_swfactory, proxy_swcharacter) = fetch_last()
-    (proxy, proxy_admin, proxy_swfactory) = do_upgrade(
+    (proxy, proxy_admin, proxy_swfactory) = do_factory_upgrade(
         proxy_swfactory, proxy, proxy_admin
     )
     print(f"{proxy} {proxy_admin} {proxy_swfactory} {proxy_swcharacter}")

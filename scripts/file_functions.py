@@ -1,5 +1,5 @@
 from pathlib import Path
-from brownie import network
+from brownie import network, Contract
 import os
 import json
 import random
@@ -100,6 +100,27 @@ def read_edition():
     filepath = f"./metadata/network_to_cid.json"
     with Path(filepath).open("rb") as fp:
         return json.load(fp)[network.show_active()]["current_edition"]
+
+
+def update_address(contract, edit):
+    filepath = f"./metadata/network_to_cid.json"
+    data = None
+    with open(filepath, "rb") as file:
+        data = json.load(file)
+    with open(filepath, "w") as file:
+        data[network.show_active()][contract] = edit.address
+        json.dump(data, file, sort_keys=True, indent=4)
+
+
+def read_address(contract_name, contract_type):
+    filepath = f"./metadata/network_to_cid.json"
+    with Path(filepath).open("rb") as fp:
+        address = json.load(fp)[network.show_active()][contract_name]
+        return Contract.from_abi(
+            contract_name,
+            address,
+            contract_type.abi,
+        )
 
 
 def update_dictionary(new_dictionary):

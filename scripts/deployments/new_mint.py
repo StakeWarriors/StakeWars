@@ -1,11 +1,14 @@
 from brownie import StakeWarsFactoryUpgradable
+from scripts.file_functions import read_address
 
 from scripts.helpful_scripts import get_account
 
 
 def run_reserve(iterations):
     account = get_account()
-    stake_wars = StakeWarsFactoryUpgradable[-1]
+    stake_wars = read_address(
+        "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
+    )
     print(f"Now Reserving: {iterations} token(s)")
     for i in range(iterations):
         stake_wars._reserve({"from": account}).wait(1)
@@ -15,7 +18,9 @@ def run_mint(iterations, account):
     if account == None:
         print("Failed to Provide Account")
         return
-    stake_wars = StakeWarsFactoryUpgradable[-1]
+    stake_wars = read_address(
+        "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
+    )
     amount = stake_wars.price()
     print(f"Now Minting: {iterations} token(s) at {amount} Wei")
     for i in range(iterations):

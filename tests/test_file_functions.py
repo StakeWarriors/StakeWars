@@ -13,7 +13,7 @@ from scripts.file_functions import (
     update_edition,
     update_group_uris,
 )
-from scripts.helpful_scripts import is_local, is_mainnet
+from scripts.helpful_scripts import is_mainnet
 
 
 def test_get_character_name():

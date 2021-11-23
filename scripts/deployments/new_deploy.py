@@ -1,9 +1,9 @@
 import os
 from brownie import (
-    StakeWarsFactoryUpgradable,
     Contract,
     ProxyAdmin,
     TransparentUpgradeableProxy,
+    StakeWarsFactoryUpgradable,
     StakeWarsCharacterUpgradable,
     config,
     network,
@@ -11,6 +11,7 @@ from brownie import (
 from dotenv import load_dotenv
 from scripts.file_functions import (
     read_edition,
+    update_address,
 )
 
 from scripts.helpful_scripts import (
@@ -30,6 +31,7 @@ def deploy_admin():
 
         proxy_admin = ProxyAdmin.deploy({"from": account})
         print(f"Deploying new ProxyAdmin to f{proxy_admin}")
+        update_address("ProxyAdmin", proxy_admin)
         return proxy_admin
     return config["networks"][network.show_active()]["proxy_admin"]
 
@@ -39,6 +41,7 @@ def deploy_swfu(conrtact=StakeWarsFactoryUpgradable):
     to_publish = config["networks"][network.show_active()].get("verify", False)
     stakewars_factory = conrtact.deploy({"from": account}, publish_source=to_publish)
     print("StakeWarsFactoryUpgradable Deployed")
+    update_address("StakeWarsFactory", stakewars_factory)
     return stakewars_factory
 
 
@@ -47,6 +50,7 @@ def deploy_swcu(conrtact=StakeWarsCharacterUpgradable):
     to_publish = config["networks"][network.show_active()].get("verify", False)
     stakewars_character = conrtact.deploy({"from": account}, publish_source=to_publish)
     print("StakeWarsCharacterUpgradable Deployed")
+    update_address("StakeWarsCharacter", stakewars_character)
     return stakewars_character
 
 
@@ -90,6 +94,7 @@ def deploy_swfu_proxy(totalSupply, stakewars_factory, proxy_admin, _vrfCoordinat
     fund_link(proxy_stakewars_factory.address, account=account)
     crowd_safe_proxy = config["networks"][network.show_active()]["crowd_safe_proxy"]
     proxy_stakewars_factory._setCrowdSafeAddress(crowd_safe_proxy, {"from": account})
+    update_address("StakeWarsFactoryUpgradableProxy", proxy_stakewars_factory)
     return proxy, proxy_admin, proxy_stakewars_factory
 
 
@@ -97,19 +102,40 @@ def deploy_swcu_proxy(stakewars_character, proxy_admin):
     account = get_account()
     edition = read_edition()
     _securityKey = os.getenv("SECRET_LARGE_PRODUCT")
-    swfactory_encode_initializer_function = encode_function_data(edition, _securityKey)
+    swcharacter_encode_initializer_function = encode_function_data(
+        edition, _securityKey
+    )
 
     proxy = TransparentUpgradeableProxy.deploy(
         stakewars_character.address,
         proxy_admin.address,
-        swfactory_encode_initializer_function,
+        swcharacter_encode_initializer_function,
         {"from": account, "gas_limit": 1200000},
         publish_source=config["networks"][network.show_active()].get("verify", False),
     )
     proxy_stakewars_character = Contract.from_abi(
-        "StakeWarsFactoryUpgradable", proxy.address, StakeWarsFactoryUpgradable.abi
+        "StakeWarsCharacterUpgradable", proxy.address, StakeWarsCharacterUpgradable.abi
     )
+    update_address("StakeWarsCharacterUpgradableProxy", proxy_stakewars_character)
     return proxy, proxy_admin, proxy_stakewars_character
+
+
+def all_deploy():
+    proxy_admin = deploy_admin()
+    swf = deploy_swfu()
+    _vrfCoordinator = get_contract("vrf_coordinator")
+    totalSupply = config["networks"][network.show_active()]["total_supply"]
+    (proxy, proxy_admin, proxy_stakewars_factory) = deploy_swfu_proxy(
+        totalSupply, swf, proxy_admin, _vrfCoordinator
+    )
+
+    stakewars_character = deploy_swcu()
+    (proxy, proxy_admin, proxy_stakewars_character) = deploy_swcu_proxy(
+        stakewars_character, proxy_admin
+    )
+
+    print_weblink(proxy_stakewars_character, proxy_stakewars_factory)
+    return (proxy_stakewars_factory, proxy_stakewars_character)
 
 
 def prompt():

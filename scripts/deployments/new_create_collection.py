@@ -16,6 +16,7 @@ from scripts.file_functions import (
     NFT_IMAGES_DIR,
     get_any_character,
     move_to_used,
+    read_address,
     read_dictionary,
     update_dictionary,
     update_group_uris,
@@ -33,7 +34,9 @@ load_dotenv()
 
 def create_collection(account=None):
     account = account if account else get_account()
-    stake_wars = StakeWarsFactoryUpgradable[-1]
+    stake_wars = read_address(
+        "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
+    )
     numOwnedWarriors = stake_wars.warriorsToBeDetailedLength()
     SECRET = os.getenv("SECRET_LARGE_PRODUCT")
     tokens = []

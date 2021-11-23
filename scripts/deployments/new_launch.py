@@ -1,17 +1,27 @@
 import os
-from brownie import StakeWarsFactoryUpgradable, StakeWarsCharacterUpgradable, network
+from brownie import StakeWarsCharacterUpgradable, StakeWarsFactoryUpgradable
 from dotenv import load_dotenv
 
-from scripts.file_functions import read_edition, read_group_uris, update_edition
+from scripts.file_functions import (
+    read_address,
+    read_edition,
+    update_edition,
+)
 from scripts.helpful_scripts import get_account, print_weblink
 
 load_dotenv()
 
 
-def go_for_launch():
+def go_for_launch(swf, swc):
+    if swf == None:
+        swf = read_address(
+            "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
+        )
+    if swc == None:
+        swc = read_address(
+            "StakeWarsCharacterUpgradableProxy", StakeWarsCharacterUpgradable
+        )
     master_account = get_account()
-    swf = StakeWarsFactoryUpgradable[-1]
-    swc = StakeWarsCharacterUpgradable[-1]
     curr_edition = read_edition()
     _securityKey = os.getenv("SECRET_LARGE_PRODUCT")
     swf._launchNFTs(_securityKey, {"from": master_account})

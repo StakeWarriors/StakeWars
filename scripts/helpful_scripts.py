@@ -5,6 +5,8 @@ from brownie import (
     VRFCoordinatorMock,
     StakeWarsCharacterUpgradable,
     StakeWarsFactoryUpgradable,
+    ProxyAdmin,
+    TransparentUpgradeableProxy,
     LinkToken,
     Contract,
 )
@@ -24,6 +26,8 @@ ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 contract_to_mock = {
     "vrf_coordinator": VRFCoordinatorMock,
     "link_token": LinkToken,
+    "ProxyAdmin": ProxyAdmin,
+    "TransparentUpgradeableProxy": TransparentUpgradeableProxy,
     "StakeWarsCharacterUpgradable": StakeWarsCharacterUpgradable,
     "StakeWarsFactoryUpgradable": StakeWarsFactoryUpgradable,
 }

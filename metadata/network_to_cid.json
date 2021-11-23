@@ -1,5 +1,10 @@
 {
     "development": {
+        "ProxyAdmin": "0x34b97ffa01dc0DC959c5f1176273D0de3be914C1",
+        "StakeWarsCharacter": "0x4e3E7dC9D84dA7BE8f017f4C36153A61341736d4",
+        "StakeWarsCharacterUpgradableProxy": "0x0AC45e945A008D3fc19da8f591be8601C1F63130",
+        "StakeWarsFactory": "0xc830Ad2FDfCC2f368fE5DeC93b1Dc72ecABb3691",
+        "StakeWarsFactoryUpgradableProxy": "0x741e3E1f81041c62C2A97d0b6E567AcaB09A6232",
         "current_edition": 0,
         "group_uris": {
             "-1": null

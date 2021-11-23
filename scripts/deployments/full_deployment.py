@@ -1,19 +1,18 @@
-from brownie import ZERO_ADDRESS, StakeWarsFactory, StakeWarsCharacter
+from scripts.file_functions import read_address
 import time
-from scripts.deployments.create_collection import save_collection
-from scripts.deployments.new_deploy import (
-    deployStakeWarsCharacter,
-    deployStakeWarsFactory,
+from brownie import (
+    ZERO_ADDRESS,
 )
-from scripts.deployments.launch import go_for_launch
-from scripts.deployments.mint import run_mint, run_reserve
-from scripts.deployments.reset_deployment import reset
+from scripts.deployments.new_deploy import all_deploy
+from scripts.deployments.new_create_collection import save_collection
+from scripts.deployments.new_launch import go_for_launch
+from scripts.deployments.new_mint import run_mint, run_reserve
 from scripts.helpful_scripts import get_account, print_weblink
 
 
-def normal_user_register(user_account):
-    swf = StakeWarsFactory[-1]
-    swc = StakeWarsCharacter[-1]
+def normal_user_register(user_account, swf, swc):
+    swf = swf == None if read_address("StakeWarsFactoryUpgradableProxy") else swf
+    swc = swc == None if read_address("StakeWarsCharacterUpgradableProxy") else swc
     warriors = swf.GetMyTokenWallet(user_account)
     for w in range(len(warriors)):
         warrior_addr = swf.GetMyStakeWarrior(user_account, w)
@@ -23,9 +22,6 @@ def normal_user_register(user_account):
 
 
 def user_prompts():
-    reset_and_redeploy = input("[Reset?] Would you like to reset and redeploy:(y/n) ")
-    reset_and_redeploy = reset_and_redeploy == "y" or reset_and_redeploy == "Y"
-
     value = input("[mint] Would you like to create a reserve:(#/y/n) ")
     if value.isnumeric():
         remint = value
@@ -48,22 +44,15 @@ def user_prompts():
     launch = input("[launch] Would you like to Launch:(y/n) ")
     launch = launch == "y" or launch == "Y"
 
-    return (reset_and_redeploy, int(remint), int(have_normal_user), launch)
+    return (int(remint), int(have_normal_user), launch)
 
 
 # Replicate a general use case
 def main():
     master_account = get_account()
-    (reset_and_redeploy, remint, have_normal_user, launch) = user_prompts()
-    if reset_and_redeploy:
-        reset()
-        deployStakeWarsFactory(100, master_account)
-        deployStakeWarsCharacter(master_account)
-        print_weblink()
-        time.sleep(90)
-
-    swf = StakeWarsFactory[-1]
-    swc = StakeWarsCharacter[-1]
+    (remint, have_normal_user, launch) = user_prompts()
+    (swf, proxy_stakewars_character) = all_deploy()
+    time.sleep(60)
     print("Pre-Sale")
     if remint > 0:
         run_reserve(remint)

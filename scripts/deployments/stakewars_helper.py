@@ -1,6 +1,7 @@
 import os
 from brownie import StakeWarsFactoryUpgradable, StakeWarsInternals, Contract, network
 from scripts.file_functions import (
+    read_address,
     read_archived_tokens,
     read_group_uris,
     update_archived_tokens,
@@ -14,8 +15,8 @@ load_dotenv()
 
 def set_base_uri():
     master_account = get_account()
-    swf = StakeWarsFactoryUpgradable[-1]
-    uri_group = StakeWarsFactoryUpgradable[-1]._uriGroup()
+    swf = read_address("StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable)
+    uri_group = swf._uriGroup()
     print(uri_group)
     cid_hash = read_group_uris().get(str(uri_group))
     print(cid_hash)
@@ -26,7 +27,7 @@ def set_base_uri():
 
 def archive_tokens_to_metadata(tokens):
     account = get_account()
-    stake_wars = StakeWarsFactoryUpgradable[-1]
+    swf = read_address("StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable)
     archived_tokens = read_archived_tokens()
     print(f"Archiving {len(tokens)} Token(s)")
     for token in tokens:
@@ -39,13 +40,13 @@ def archive_tokens_to_metadata(tokens):
         archived_tokens.append(archivable)
     update_archived_tokens(archived_tokens)
     set_base_uri()
-    stake_wars._resetWarriorsToBeDetails({"from": account})
+    swf._resetWarriorsToBeDetails({"from": account})
 
 
 def get_rarities(account=None):
     account = account if account else get_account()
-    stake_wars = StakeWarsFactoryUpgradable[-1]
-    numOwnedWarriors = stake_wars.warriorsToBeDetailedLength()
+    swf = read_address("StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable)
+    numOwnedWarriors = swf.warriorsToBeDetailedLength()
     public_token_uris = []
     rarities_numbers = []
     rarities_names = []
@@ -55,7 +56,7 @@ def get_rarities(account=None):
     lands = []
     SECRET = os.getenv("SECRET_LARGE_PRODUCT")
     for warriorIndex in range(numOwnedWarriors):
-        warrior = stake_wars.warriorsToBeDetailed(warriorIndex)
+        warrior = swf.warriorsToBeDetailed(warriorIndex)
         character = Contract.from_abi(
             StakeWarsInternals._name, warrior, StakeWarsInternals.abi
         )

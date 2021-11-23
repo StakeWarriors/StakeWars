@@ -5,6 +5,7 @@ from brownie import StakeWarsFactoryUpgradable
 
 from scripts.deployments.new_create_collection import create_collection
 from scripts.deployments.reset_deployment import reset
+from scripts.file_functions import read_address
 from scripts.helpful_scripts import get_account
 from dotenv import load_dotenv
 
@@ -32,7 +33,9 @@ def test_get_base_uri_valid():
     # Setup
     fro = {"from": get_account()}
     setup_prep()
-    stake_wars = StakeWarsFactoryUpgradable[-1]
+    stake_wars = read_address(
+        "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
+    )
     stake_wars._reserve(fro).wait(1)
 
     # Test Metadata Release Prep
@@ -65,7 +68,9 @@ def test_get_base_uri_valid():
 def test_generated_metadata():
     fro = {"from": get_account()}
     setup_prep()
-    stake_wars = StakeWarsFactoryUpgradable[-1]
+    stake_wars = read_address(
+        "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
+    )
     stake_wars._reserve(fro).wait(1)
     (tokens, uri_group) = create_collection()
     assert uri_group == 0

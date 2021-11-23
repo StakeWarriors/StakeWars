@@ -63,15 +63,5 @@ def create_default_art():
     )
 
 
-# account = get_account()
-# deployStakeWarsFactory(1, account=account)
-# time.sleep(60)
-
-# swf = StakeWarsFactory[-1]
-# swf._reserve({"from": account})
-# r = swf.GetMyTokenWallet(account, {"from": account})
-# print(r)
-
-
 def main():
     get_size()
