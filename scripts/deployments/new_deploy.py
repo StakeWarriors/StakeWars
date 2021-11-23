@@ -37,7 +37,7 @@ def deploy_admin():
 def deploy_swfu(conrtact=StakeWarsFactoryUpgradable):
     account = get_account()
     to_publish = config["networks"][network.show_active()].get("verify", False)
-    stakewars_factory = conrtact.deploy({"from": account}, to_publish)
+    stakewars_factory = conrtact.deploy({"from": account}, publish_source=to_publish)
     print("StakeWarsFactoryUpgradable Deployed")
     return stakewars_factory
 
@@ -45,7 +45,7 @@ def deploy_swfu(conrtact=StakeWarsFactoryUpgradable):
 def deploy_swcu(conrtact=StakeWarsCharacterUpgradable):
     account = get_account()
     to_publish = config["networks"][network.show_active()].get("verify", False)
-    stakewars_character = conrtact.deploy({"from": account}, to_publish)
+    stakewars_character = conrtact.deploy({"from": account}, publish_source=to_publish)
     print("StakeWarsCharacterUpgradable Deployed")
     return stakewars_character
 
@@ -75,7 +75,6 @@ def deploy_swfu_proxy(totalSupply, stakewars_factory, proxy_admin):
         _linkFee,
         _keyhash,
         _securityKey,
-        {"from": account},
     )
 
     proxy = TransparentUpgradeableProxy.deploy(
@@ -91,7 +90,7 @@ def deploy_swfu_proxy(totalSupply, stakewars_factory, proxy_admin):
 
     fund_link(proxy_stakewars_factory.address, account=account)
     crowd_safe_proxy = config["networks"][network.show_active()]["crowd_safe_proxy"]
-    proxy_stakewars_factory._setCrowdSafeAddress(crowd_safe_proxy)
+    proxy_stakewars_factory._setCrowdSafeAddress(crowd_safe_proxy, {"from": account})
     return proxy, proxy_admin, proxy_stakewars_factory
 
 
@@ -128,18 +127,17 @@ def prompt():
 
 def main():
     # Solely Deploy
-    master_account = get_account()
     proxy_admin = deploy_admin()
     (redeploySWF, redeploySWC) = prompt()
     proxy_stakewars_character = None
     proxy_stakewars_factory = None
     if redeploySWC:
-        stakewars_character = deploy_swcu(master_account)
+        stakewars_character = deploy_swcu()
         (proxy, proxy_admin, proxy_stakewars_character) = deploy_swcu_proxy(
             stakewars_character, proxy_admin
         )
     if redeploySWF:
-        swf = deploy_swfu(100, master_account)
+        swf = deploy_swfu()
         totalSupply = config["networks"][network.show_active()]["total_supply"]
         (proxy, proxy_admin, proxy_stakewars_factory) = deploy_swfu_proxy(
             totalSupply, swf, proxy_admin
