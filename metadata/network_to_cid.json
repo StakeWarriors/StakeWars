@@ -1,7 +1,9 @@
 {
     "development": {
         "current_edition": 0,
-        "group_uris": {}
+        "group_uris": {
+            "-1": null
+        }
     },
     "kovan": {
         "current_edition": 0,

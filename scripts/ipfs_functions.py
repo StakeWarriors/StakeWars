@@ -20,10 +20,3 @@ def upload_to_ipfs_client(edition, public_token_uri, file_to_upload):
         filehash = client.files.stat(path_uri)["Hash"]
         full_uri = f"https://ipfs.io/ipfs/{filehash}/?filename={public_token_uri}"
     return (path_uri, full_uri)
-
-
-def get_ipfs_dir():
-    path_uri = f"/{network.show_active()}/"
-    with ipfshttpclient.connect() as client:
-        filehash = client.files.stat(path_uri)["Hash"]
-        return filehash
