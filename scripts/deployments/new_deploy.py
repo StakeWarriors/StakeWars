@@ -9,11 +9,8 @@ from brownie import (
     network,
 )
 from dotenv import load_dotenv
-from scripts.file_functions import (
-    read_edition,
-    update_address,
-)
-
+from scripts.deployments.new_mocks import deploy_link, deploy_vrfc
+from scripts.file_functions import read_edition, update_address
 from scripts.helpful_scripts import (
     encode_function_data,
     fund_link,
@@ -103,7 +100,7 @@ def deploy_swcu_proxy(stakewars_character, proxy_admin):
     edition = read_edition()
     _securityKey = os.getenv("SECRET_LARGE_PRODUCT")
     swcharacter_encode_initializer_function = encode_function_data(
-        edition, _securityKey
+        stakewars_character.__StakeWarsCharacter_init, edition, _securityKey
     )
 
     proxy = TransparentUpgradeableProxy.deploy(
@@ -123,11 +120,19 @@ def deploy_swcu_proxy(stakewars_character, proxy_admin):
 def all_deploy():
     proxy_admin = deploy_admin()
     swf = deploy_swfu()
-    _vrfCoordinator = get_contract("vrf_coordinator")
+    _vrfCoordinator = None
+    if network.show_active() == "development":
+        link_token_mock = deploy_link()
+        _vrfCoordinator = deploy_vrfc(link_token_mock)
+        print("Mocking Coordinator")
+    else:
+        _vrfCoordinator = get_contract("vrf_coordinator")
+
     totalSupply = config["networks"][network.show_active()]["total_supply"]
     (proxy, proxy_admin, proxy_stakewars_factory) = deploy_swfu_proxy(
         totalSupply, swf, proxy_admin, _vrfCoordinator
     )
+    _vrfCoordinator.callBackWithRandomness(0, 1, proxy_stakewars_factory)
 
     stakewars_character = deploy_swcu()
     (proxy, proxy_admin, proxy_stakewars_character) = deploy_swcu_proxy(

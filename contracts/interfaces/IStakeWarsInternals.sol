@@ -23,8 +23,6 @@ interface IStakeWarsInternals {
         view
         returns (bytes32);
 
-    function getEdition() external view returns (uint256);
-
     function setClass(
         uint8 newClass,
         uint8 index,

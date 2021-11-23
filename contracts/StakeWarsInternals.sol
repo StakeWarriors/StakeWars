@@ -69,10 +69,6 @@ contract StakeWarsInternals is IStakeWarsInternals {
         return land[index];
     }
 
-    function getEdition() public view override returns (uint256) {
-        return edition;
-    }
-
     function getClass(uint8 index) public view override returns (uint8) {
         return clazz[index];
     }

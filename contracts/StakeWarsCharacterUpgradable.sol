@@ -7,8 +7,6 @@ import "./vendor/upgradeable/openzeppelin/access/AccessControlUpgradeable.sol";
 contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
     uint256 public Edition;
     uint256[] private _securityKey;
-    //Address is ERC-721 Token not user
-    mapping(address => IStakeWarsInternals) public _registeredStakeWarriors;
     //Addresses to supported games
     mapping(address => bool) public _registeredGames;
 
@@ -97,14 +95,16 @@ contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
         return ret;
     }
 
+    function getEdition(address warriorAddr) public view returns (uint256) {
+        return IStakeWarsInternals(warriorAddr).edition();
+    }
+
     function _class(address warriorAddr, uint8 index)
         public
         view
         returns (string memory, uint8)
     {
-        uint8 classIndex = _registeredStakeWarriors[warriorAddr].getClass(
-            index
-        );
+        uint8 classIndex = IStakeWarsInternals(warriorAddr).getClass(index);
         if (classIndex == 1) return ("Avenger", 1);
         else if (classIndex == 2) return ("Ardent", 2);
         else if (classIndex == 3) return ("Barbarian", 3);
@@ -246,7 +246,7 @@ contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
     modifier onlyAfterRelease(address characterAddr) {
         IStakeWarsInternals character = IStakeWarsInternals(characterAddr);
         require(
-            character.getEdition() < Edition ||
+            character.edition() < Edition ||
                 hasRole(DEFAULT_ADMIN_ROLE, _msgSender()) ||
                 hasRole(GAME_CONTROLLER_ROLE, _msgSender())
         );

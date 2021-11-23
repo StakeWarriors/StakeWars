@@ -54,6 +54,24 @@ contract StakeWarsFactoryUpgradable is
         __AccessControl_init();
         __ERC721_init(name, symbol);
         __VRFConsumerBase_init(_vrfCoordinator, _linkToken);
+        __StakeWarsFactory_init_unchained(
+            _edition,
+            _defaultURI,
+            _MaxSupply,
+            _linkFee,
+            _keyhash,
+            securityKey
+        );
+    }
+
+    function __StakeWarsFactory_init_unchained(
+        uint256 _edition,
+        string memory _defaultURI,
+        uint256 _MaxSupply,
+        uint256 _linkFee,
+        bytes32 _keyhash,
+        uint256 securityKey
+    ) public initializer {
         Edition = _edition;
         defaultURI = _defaultURI;
         linkFee = _linkFee;

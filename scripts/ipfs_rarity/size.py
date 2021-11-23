@@ -10,7 +10,9 @@ def get_creature_name(file_path):
 
 size_to_creature = {
     "13212": "Micromorph Amoeba",
+    "13661": "Flesmian",
     "14814": "Abyss Jellyfish",
+    "15117": "Kantto",
     "15358": "Minimorph Amoeba",
     "15440": "Wootci",
     "16960": "Abominable Yeti",

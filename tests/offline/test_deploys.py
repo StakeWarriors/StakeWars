@@ -4,7 +4,6 @@ import pytest
 from scripts.file_functions import read_address
 
 from scripts.helpful_scripts import get_account
-from scripts.deployments.new_deploy import deploy_swfu
 from scripts.helpful_scripts import get_account
 from tests.offline.test_util import setup_prep
 

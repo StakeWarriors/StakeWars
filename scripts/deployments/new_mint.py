@@ -21,7 +21,7 @@ def run_mint(iterations, account):
     stake_wars = read_address(
         "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
     )
-    amount = stake_wars.price()
+    amount = stake_wars.Price()
     print(f"Now Minting: {iterations} token(s) at {amount} Wei")
     for i in range(iterations):
         stake_wars.mint({"from": account, "amount": amount}).wait(1)

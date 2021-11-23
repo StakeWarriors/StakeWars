@@ -35,7 +35,7 @@ def migrate_factory_contract():
         contract, proxy, proxy_admin
     )
 
-    print_weblink()
+    # print_weblink()
     return proxy, proxy_admin, proxy_swfactory
 
 
@@ -58,7 +58,7 @@ def migrate_character_contract():
         contract, proxy, proxy_admin
     )
 
-    print_weblink()
+    # print_weblink()
     return proxy, proxy_admin, proxy_swfactory
 
 
@@ -68,7 +68,7 @@ def fetch_last():
     proxy = get_contract("TransparentUpgradeableProxy")
     proxy_swfactory = get_contract("StakeWarsFactoryUpgradable")
     proxy_swcharacter = get_contract("StakeWarsCharacterUpgradable")
-    print_weblink()
+    print_weblink(proxy_swcharacter, proxy_swfactory)
     return proxy, proxy_admin, proxy_swfactory, proxy_swcharacter
 
 

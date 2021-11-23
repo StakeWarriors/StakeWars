@@ -81,11 +81,13 @@ def get_contract(contract_name):
     return contract
 
 
-def get_account(index=None, id=None):
+def get_account(index=None, id=None, key="from_blue_key"):
     if index:
         return accounts[index]
     if id:
         return accounts.load(id)
+    if key:
+        return accounts.add(config["wallets"][key])
     if (
         network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS
         or network.show_active() in FORKED_LOCAL_ENVIRONMENTS

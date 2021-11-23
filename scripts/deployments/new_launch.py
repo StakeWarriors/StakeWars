@@ -28,7 +28,7 @@ def go_for_launch(swf, swc):
     swc._launchNFTs(_securityKey, {"from": master_account})
     print("Launch")
     update_edition(curr_edition + 1)
-    print_weblink()
+    print_weblink(swc, swf)
 
 
 def main():

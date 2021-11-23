@@ -16,7 +16,7 @@ load_dotenv()
 def set_base_uri():
     master_account = get_account()
     swf = read_address("StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable)
-    uri_group = swf._uriGroup()
+    uri_group = swf.getBaseURILength({"from": master_account})
     print(uri_group)
     cid_hash = read_group_uris().get(str(uri_group))
     print(cid_hash)
@@ -31,8 +31,6 @@ def archive_tokens_to_metadata(tokens):
     archived_tokens = read_archived_tokens()
     print(f"Archiving {len(tokens)} Token(s)")
     for token in tokens:
-        print(token)
-        print(tokens)
         archivable = {
             "tid": token["tokenId"],
             "rarity": token["attributes"][1]["value"],
