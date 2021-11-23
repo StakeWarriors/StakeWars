@@ -6,9 +6,8 @@ from tests.offline.test_util import setup_prep
 
 
 def test_reserve_minting_valid():
-    setup_prep()
+    (swf, swc) = setup_prep()
     account = get_account()
-    swf = StakeWarsFactoryUpgradable[-1]
     # Prep
     swf._reserve({"from": account}).wait(1)
 
@@ -17,9 +16,8 @@ def test_reserve_minting_valid():
 
 
 def test_reserve_minting_invalid():
-    setup_prep()
+    (swf, swc) = setup_prep()
     account = get_account(index=2)
-    swf = StakeWarsFactoryUpgradable[-1]
 
     with pytest.raises(exceptions.VirtualMachineError):
         swf._reserve({"from": account})
@@ -29,7 +27,7 @@ def test_presale_minting_valid():
     setup_prep()
     admin = get_account()
     account = get_account(index=2)
-    swf = StakeWarsFactoryUpgradable[-1]
+    (swf, swc) = setup_prep()
     price = swf.Price()
 
     assert swf.PresaleActive() == False
@@ -52,10 +50,9 @@ def test_presale_minting_valid():
 
 
 def test_sale_minting_valid():
-    setup_prep()
+    (swf, swc) = setup_prep()
     admin = get_account()
     account = get_account(index=2)
-    swf = StakeWarsFactoryUpgradable[-1]
     price = swf.Price()
 
     assert swf.SaleActive() == False
