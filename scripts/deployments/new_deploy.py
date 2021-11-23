@@ -50,14 +50,13 @@ def deploy_swcu(conrtact=StakeWarsCharacterUpgradable):
     return stakewars_character
 
 
-def deploy_swfu_proxy(totalSupply, stakewars_factory, proxy_admin):
+def deploy_swfu_proxy(totalSupply, stakewars_factory, proxy_admin, _vrfCoordinator):
     account = get_account()
     name = "StakeWars"
     symbol = "5WARS"
     edition = read_edition()
     default_uri = config["all_networks"]["default_uri"]
     _maxSupply = totalSupply
-    _vrfCoordinator = get_contract("vrf_coordinator")
     _linkToken = get_contract("link_token")
     _linkFee = config["networks"][network.show_active()]["link_fee"]
     _keyhash = config["networks"][network.show_active()]["keyhash"]
@@ -138,9 +137,10 @@ def main():
         )
     if redeploySWF:
         swf = deploy_swfu()
+        _vrfCoordinator = get_contract("vrf_coordinator")
         totalSupply = config["networks"][network.show_active()]["total_supply"]
         (proxy, proxy_admin, proxy_stakewars_factory) = deploy_swfu_proxy(
-            totalSupply, swf, proxy_admin
+            totalSupply, swf, proxy_admin, _vrfCoordinator
         )
 
     print_weblink(proxy_stakewars_character, proxy_stakewars_factory)
