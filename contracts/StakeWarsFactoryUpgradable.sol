@@ -4,6 +4,7 @@ import "./vendor/upgradeable/openzeppelin/token/ERC721/extensions/ERC721Enumerab
 import "./vendor/upgradeable/openzeppelin/access/AccessControlUpgradeable.sol";
 import "./vendor/upgradeable/chainlink/VRFConsumerBaseUpgradable.sol";
 import "./vendor/upgradeable/crowdsafe/CrowdSafeV2.sol";
+import "./interfaces/IStakeWarsInternals.sol";
 import "./StakeWarsInternals.sol";
 
 contract StakeWarsFactoryUpgradable is
@@ -32,12 +33,12 @@ contract StakeWarsFactoryUpgradable is
 
     address public crowdSafe;
     address[] public patronArray;
-    StakeWarsInternals[] public warriorsToBeDetailed;
+    IStakeWarsInternals[] public warriorsToBeDetailed;
 
     mapping(uint48 => uint256) public rarityRatio;
     mapping(address => uint256) public patronsList;
     mapping(address => uint256) public presaleWhitelist;
-    mapping(uint256 => StakeWarsInternals) public tokenIdToStakeWarrior;
+    mapping(uint256 => IStakeWarsInternals) public tokenIdToStakeWarrior;
 
     function __StakeWarsFactory_init(
         string memory name,
@@ -137,7 +138,7 @@ contract StakeWarsFactoryUpgradable is
 
             _generativeSeed = randomness;
         }
-        StakeWarsInternals warrior = new StakeWarsInternals(
+        IStakeWarsInternals warrior = new StakeWarsInternals(
             Edition,
             randomness,
             _tokenIdsGen,
@@ -241,7 +242,7 @@ contract StakeWarsFactoryUpgradable is
         override
         returns (string memory)
     {
-        StakeWarsInternals thisWarrior = tokenIdToStakeWarrior[_tokenId];
+        IStakeWarsInternals thisWarrior = tokenIdToStakeWarrior[_tokenId];
         uint256 myUriGroup = thisWarrior.uriGroup();
         uint256 myEdition = thisWarrior.edition();
         if (myUriGroup < baseURI.length && myEdition < Edition) {
@@ -313,7 +314,7 @@ contract StakeWarsFactoryUpgradable is
     function GetMyStakeWarrior(address owner, uint256 index)
         external
         view
-        returns (StakeWarsInternals)
+        returns (IStakeWarsInternals)
     {
         return tokenIdToStakeWarrior[GetMyTokenWallet(owner)[index]];
     }

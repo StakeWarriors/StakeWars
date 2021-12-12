@@ -1,4 +1,6 @@
 import json
+import pytest
+from scripts.helpful_scripts import is_local
 from scripts.pinata import gen_edition_cid, upload_to_pinata
 from brownie import network
 
@@ -11,6 +13,8 @@ correct_answers = {
 
 
 def test_can_generate_cid():
+    if is_local():
+        pytest.skip()
     cid = gen_edition_cid(1)
     assert cid == correct_answers[network.show_active()]["test_can_generate_cid"]
 

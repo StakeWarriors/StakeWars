@@ -1,11 +1,11 @@
 {
     "development": {
-        "ProxyAdmin": "0x2e1172240ba2a47Cec8f1AbF98E13C4CE304e5D7",
-        "StakeWarsCharacter": "0xdc4F91DB182A55dC67D3D7022B204504f0FD9f26",
-        "StakeWarsCharacterUpgradableProxy": "0xAcfbcF193f38f08d648864922C89fe1C940B292F",
-        "StakeWarsFactory": "0xD34Db8572E87BF699463e63e389508c7D5f3e2C5",
-        "StakeWarsFactoryUpgradableProxy": "0x980C27c38e4283dEEDf1B3b174D463164dae547A",
-        "current_edition": 0,
+        "ProxyAdmin": "0x85206245b8ffc4e4561F452D84F7A824ae682812",
+        "StakeWarsCharacter": "0x0276FCc5b85B2167BAB244b91eda1a49c2D83339",
+        "StakeWarsCharacterUpgradableProxy": "0xfF2271F699Cb15F269Bf976915D764d292673dB3",
+        "StakeWarsFactory": "0xd5b62bC2cDa2A6a839D730f994712DbfE7e06A9d",
+        "StakeWarsFactoryUpgradableProxy": "0x661308Fd26c2142D696b83C79A99CB448815c676",
+        "current_edition": 1,
         "group_uris": {
             "-1": null
         }
