@@ -33,19 +33,19 @@ def deploy_admin():
     return config["networks"][network.show_active()]["proxy_admin"]
 
 
-def deploy_swfu(conrtact=StakeWarsFactoryUpgradable):
+def deploy_swfu(contract=StakeWarsFactoryUpgradable):
     account = get_account()
     to_publish = config["networks"][network.show_active()].get("verify", False)
-    stakewars_factory = conrtact.deploy({"from": account}, publish_source=to_publish)
+    stakewars_factory = contract.deploy({"from": account}, publish_source=to_publish)
     print("StakeWarsFactoryUpgradable Deployed")
     update_address("StakeWarsFactory", stakewars_factory)
     return stakewars_factory
 
 
-def deploy_swcu(conrtact=StakeWarsCharacterUpgradable):
+def deploy_swcu(contract=StakeWarsCharacterUpgradable):
     account = get_account()
     to_publish = config["networks"][network.show_active()].get("verify", False)
-    stakewars_character = conrtact.deploy({"from": account}, publish_source=to_publish)
+    stakewars_character = contract.deploy({"from": account}, publish_source=to_publish)
     print("StakeWarsCharacterUpgradable Deployed")
     update_address("StakeWarsCharacter", stakewars_character)
     return stakewars_character

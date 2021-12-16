@@ -29,7 +29,7 @@ contract StakeWarsFactoryUpgradable is
     uint256 internal _providedSeed;
 
     string[] private baseURI;
-    uint256[] private _securityKey;
+    uint256[] private _securityKey; //Length is = to Edition -+1
 
     address public crowdSafe;
     address[] public patronArray;
@@ -133,7 +133,7 @@ contract StakeWarsFactoryUpgradable is
         uint256 secret = _securityKey[_securityKey.length - 1];
         unchecked {
             randomness =
-                block.timestamp *
+                getBlockTimestamp() *
                 (_providedSeed + _generativeSeed + secret);
 
             _generativeSeed = randomness;
@@ -155,6 +155,10 @@ contract StakeWarsFactoryUpgradable is
 
         _safeMint(msg.sender, _tokenIdsGen);
         _tokenIdsGen++;
+    }
+
+    function getBlockTimestamp() internal view virtual returns (uint256) {
+        return block.timestamp;
     }
 
     function warriorsToBeDetailedLength() public view returns (uint256) {

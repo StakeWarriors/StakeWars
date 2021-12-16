@@ -83,6 +83,16 @@ contract StakeWarsInternals is IStakeWarsInternals {
         return levels[game];
     }
 
+    function GetExperience(address game, uint256 securityKey)
+        public
+        view
+        override
+        securityCheck(securityKey)
+        returns (uint256)
+    {
+        return experience[game];
+    }
+
     function setClass(
         uint8 newClass,
         uint8 index,
@@ -99,17 +109,12 @@ contract StakeWarsInternals is IStakeWarsInternals {
         land[index] = newLand;
     }
 
-    function updateLevel(
+    function setLevel(
         address game,
-        uint256 amount,
-        bool increase,
+        bytes32 value,
         uint256 securityKey
     ) public override securityCheck(securityKey) {
-        if (increase) {
-            levels[game] = bytes32(uint256(levels[game]) + amount);
-        } else {
-            levels[game] = bytes32(uint256(levels[game]) - amount);
-        }
+        levels[game] = value;
     }
 
     function updateExperience(

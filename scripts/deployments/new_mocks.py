@@ -1,4 +1,4 @@
-from brownie import VRFCoordinatorMock, LinkToken
+from brownie import VRFCoordinatorMock, LinkToken, StakeWarsFactoryUpgradableMock
 
 from dotenv import load_dotenv
 
@@ -24,3 +24,10 @@ def deploy_vrfc(link_token_mock):
     print("VRFCoordinatorMock Deployed")
 
     return vrf_coordinator_mock
+
+
+def deploy_swfum(contract=StakeWarsFactoryUpgradableMock):
+    account = get_account()
+    stakewars_factory = contract.deploy({"from": account})
+    print("StakeWarsFactoryUpgradableMock Deployed")
+    return stakewars_factory

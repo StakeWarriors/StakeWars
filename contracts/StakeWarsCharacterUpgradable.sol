@@ -5,7 +5,7 @@ import "./interfaces/IStakeWarsInternals.sol";
 import "./vendor/upgradeable/openzeppelin/access/AccessControlUpgradeable.sol";
 
 contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
-    uint256 public Edition;
+    uint256 public Edition; //Length is = to Edition -+1
     uint256[] private _securityKey;
     //Addresses to supported games
     mapping(address => bool) public _registeredGames;
@@ -32,6 +32,10 @@ contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
     {
         Edition++;
         _securityKey.push(securityKey);
+    }
+
+    function getEdition(address warriorAddr) public view returns (uint256) {
+        return IStakeWarsInternals(warriorAddr).edition();
     }
 
     /**
@@ -93,10 +97,6 @@ contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
     {
         (string memory ret, ) = _class(warriorAddr, index);
         return ret;
-    }
-
-    function getEdition(address warriorAddr) public view returns (uint256) {
-        return IStakeWarsInternals(warriorAddr).edition();
     }
 
     function _class(address warriorAddr, uint8 index)
@@ -183,6 +183,17 @@ contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
         return IStakeWarsInternals(characterAddr).getLevels(game, secret);
     }
 
+    function GetExperience(address characterAddr, address game)
+        public
+        view
+        onlyAfterRelease(characterAddr)
+        returns (uint256)
+    {
+        IStakeWarsInternals character = IStakeWarsInternals(characterAddr);
+        uint256 secret = _securityKey[character.edition()];
+        return IStakeWarsInternals(characterAddr).GetExperience(game, secret);
+    }
+
     function _setClass(
         address characterAddr,
         uint8 newClass,
@@ -219,18 +230,16 @@ contract StakeWarsCharacterUpgradable is AccessControlUpgradeable {
         );
     }
 
-    function _updateLevel(
+    function _setLevel(
         address characterAddr,
         address changedExperience,
-        uint256 amount,
-        bool increase
+        bytes32 value
     ) public onlyAdminOrGC {
         IStakeWarsInternals character = IStakeWarsInternals(characterAddr);
         uint256 secret = _securityKey[character.edition()];
-        IStakeWarsInternals(characterAddr).updateLevel(
+        IStakeWarsInternals(characterAddr).setLevel(
             changedExperience,
-            amount,
-            increase,
+            value,
             secret
         );
     }

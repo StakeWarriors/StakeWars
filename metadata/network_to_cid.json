@@ -1,11 +1,12 @@
 {
     "development": {
-        "ProxyAdmin": "0x85206245b8ffc4e4561F452D84F7A824ae682812",
-        "StakeWarsCharacter": "0x0276FCc5b85B2167BAB244b91eda1a49c2D83339",
-        "StakeWarsCharacterUpgradableProxy": "0xfF2271F699Cb15F269Bf976915D764d292673dB3",
-        "StakeWarsFactory": "0xd5b62bC2cDa2A6a839D730f994712DbfE7e06A9d",
-        "StakeWarsFactoryUpgradableProxy": "0x661308Fd26c2142D696b83C79A99CB448815c676",
-        "current_edition": 1,
+        "#comment/current_edition": "current_edition has to start as zero, because it is also used as an index to the security key value.",
+        "ProxyAdmin": "0x81F4b94DEB3012B33E8f43F119Fe8293e041C6aa",
+        "StakeWarsCharacter": "0x96778c9eC8Ba6A8eD3612ab62e43d70E1D22FEe0",
+        "StakeWarsCharacterUpgradableProxy": "0x61BB0eD2E670BB064B5909Eb1d611378f022b11e",
+        "StakeWarsFactory": "0xEa9f6b1ffdB9985bE1ddEc1BCF0Ae69EaAB4462C",
+        "StakeWarsFactoryUpgradableProxy": "0x55A3Fe42f89C7AdF1081D3DEbbA0BD61aBc9Af17",
+        "current_edition": 0,
         "group_uris": {
             "-1": null
         }

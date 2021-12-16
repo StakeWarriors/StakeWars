@@ -18,10 +18,19 @@ interface IStakeWarsInternals {
         view
         returns (uint16, uint16);
 
+    function getLand(uint8 index) external view returns (uint8);
+
+    function getClass(uint8 index) external view returns (uint8);
+
     function getLevels(address game, uint256 _securityKey)
         external
         view
         returns (bytes32);
+
+    function GetExperience(address game, uint256 securityKey)
+        external
+        view
+        returns (uint256);
 
     function setClass(
         uint8 newClass,
@@ -35,14 +44,9 @@ interface IStakeWarsInternals {
         uint256 _securityKey
     ) external;
 
-    function getLand(uint8 index) external view returns (uint8);
-
-    function getClass(uint8 index) external view returns (uint8);
-
-    function updateLevel(
+    function setLevel(
         address game,
-        uint256 amount,
-        bool increase,
+        bytes32 value,
         uint256 _securityKey
     ) external;
 
