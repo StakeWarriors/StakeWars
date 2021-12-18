@@ -16,7 +16,7 @@ from scripts.deployments.new_deploy import (
     deploy_swfu_proxy,
 )
 from scripts.deployments.new_mocks import deploy_link, deploy_swfum, deploy_vrfc
-from scripts.file_functions import read_edition, update_address
+from scripts.file_functions import read_edition, update_address, update_edition
 from scripts.helpful_scripts import (
     encode_function_data,
     fund_link,
@@ -32,6 +32,7 @@ FAKE_ADDRESS = "0x0000000000000000000000000000000000000001"
 
 
 def setup_prep():
+    update_edition(0)
     link_token_mock = deploy_link()
     proxy_admin = deploy_admin()
     swfactory = deploy_swfu()
@@ -95,6 +96,7 @@ def deploy_swfum_proxy(totalSupply, stakewars_factory, proxy_admin, _vrfCoordina
 
 
 def setup_prep_mocks():
+    update_edition(0)
     link_token_mock = deploy_link()
     proxy_admin = deploy_admin()
     swfactory = deploy_swfum()

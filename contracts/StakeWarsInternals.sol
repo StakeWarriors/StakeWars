@@ -33,7 +33,6 @@ contract StakeWarsInternals is IStakeWarsInternals {
         uint48 rare48 = uint48(raritySeed);
         (clazz[0], ) = determineClass(rare48);
         (land[0], ) = determineLand(rare48);
-        creationTime = block.timestamp;
     }
 
     function getRaritySeed(uint256 securityKey)
@@ -55,7 +54,7 @@ contract StakeWarsInternals is IStakeWarsInternals {
     {
         unchecked {
             uint16 length = uint16(rarityList.length);
-            uint16 rareValue = uint16((raritySeed * creationTime) % 2**length);
+            uint16 rareValue = uint16(raritySeed % 2**length);
             for (uint16 i = length - 1; i > 0; i--) {
                 if (rareValue >= 2**i) {
                     return (rarityList[length - 1 - i], uint16(length - 1 - i));

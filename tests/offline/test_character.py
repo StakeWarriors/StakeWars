@@ -1,7 +1,7 @@
 import unittest
 import os
-
 import pytest
+
 from scripts.deployments.new_mocks import FAKE_ADDRESS
 from scripts.helpful_scripts import get_account
 from tests.offline.test_util import setup_prep_mocks
@@ -17,6 +17,7 @@ class CharacterTestCase(unittest.TestCase):
         print(f"balance ={account.balance()}")
         price = swf.Price()
         swf.mint({"from": account, "amount": price})
+        assert swf.totalSupply() > 0
         return (swf.GetMyStakeWarrior(account, 0), swf, swc)
 
     # All of these fields have been modified for troubleshooting and should be reverted afterwards
@@ -37,19 +38,32 @@ class CharacterTestCase(unittest.TestCase):
     def test__raritySeed(self):
         (my_token, swf, swc) = self.get_minted_token()
         master_account = get_account()
-        account = get_account(1)
-
         (seed) = swc._raritySeed(my_token, {"from": master_account})
 
         assert seed == 0
+
+    def test_nontrivial_seed(self):
+        (my_token, swf, swc) = self.get_minted_token()
+        master_account = get_account()
+        account = get_account(1)
 
         swf.setBlockTimestamp(1, {"from": account})
         price = swf.Price()
         swf.mint({"from": account, "amount": price})
         my_next_token = swf.GetMyStakeWarrior(account, 1)
         (seed) = swc._raritySeed(my_next_token, {"from": master_account})
-
         assert seed == 176186238879358457371830500600305455299267039231006607144962
+
+        (rarity, rarityIndex) = swc._rarity(my_next_token, {"from": master_account})
+        (clazz, clazzIndex) = swc._class(my_next_token, 0, {"from": account})
+        (land, landIndex) = swc._land(my_next_token, 0, {"from": account})
+
+        assert rarity == "Common"
+        assert rarityIndex == 0
+        assert clazz == "Psion"
+        assert clazzIndex == 11
+        assert land == "Convergence"
+        assert landIndex == 3
 
     def test__rarity(self):
         (my_token, swf, swc) = self.get_minted_token()
@@ -182,6 +196,7 @@ def suite(self):
     suite = unittest.TestSuite()
     suite.addTest(CharacterTestCase("test_deployment_wallet_update"))
     suite.addTest(CharacterTestCase("test_should_be_private_or_internal"))
+    suite.addTest(CharacterTestCase("test_nontrivial_seed"))
     suite.addTest(CharacterTestCase("test__launchNFTs"))
     suite.addTest(CharacterTestCase("test__raritySeed"))
     suite.addTest(CharacterTestCase("test__rarity"))

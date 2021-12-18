@@ -10,7 +10,7 @@ from scripts.helpful_scripts import get_account
 from dotenv import load_dotenv
 
 from scripts.ipfs_rarity.colors import get_traits
-from tests.offline.test_util import setup_prep
+from tests.offline.test_util import setup_prep, setup_prep_mocks
 
 load_dotenv()
 
@@ -40,13 +40,13 @@ def test_get_base_uri_valid():
 
     # Test Metadata Release Prep
     assert stake_wars.Edition() == 0
-    assert stake_wars.getBaseURILength() == 0
+    assert stake_wars.getBaseURILength(fro) == 0
 
     # Metadata Release Prep
     fake_base_uri = "/fake/base"
     stake_wars._setBaseURI(0, fake_base_uri, fro)
     # Test Metadata Release After Prep
-    assert stake_wars.getBaseURILength() == 1
+    assert stake_wars.getBaseURILength(fro) == 1
     assert stake_wars.defaultURI() == stake_wars.tokenURI(0)
 
     # Metadata Release
@@ -55,7 +55,7 @@ def test_get_base_uri_valid():
 
     # Test After Metadata Release
     assert stake_wars.Edition() == 1
-    assert stake_wars.getBaseURILength() == 1
+    assert stake_wars.getBaseURILength(fro) == 1
     assert stake_wars.tokenURI(0) == "/fake/base/0.json"  # Index = 0
 
     # Purchase After Release
@@ -67,7 +67,7 @@ def test_get_base_uri_valid():
 
 def test_generated_metadata():
     fro = {"from": get_account()}
-    setup_prep()
+    setup_prep_mocks()
     stake_wars = read_address(
         "StakeWarsFactoryUpgradableProxy", StakeWarsFactoryUpgradable
     )

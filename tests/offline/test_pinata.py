@@ -20,6 +20,8 @@ def test_can_generate_cid():
 
 
 def test_can_upload_pinata():
+    if is_local():
+        pytest.skip()
     hash = "QmRHUMbQSJBaNvLjpcnNY4Qi1hdvsCh4RmQY6FEFiaZdSW"
     token = """
     {

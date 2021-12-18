@@ -1,11 +1,11 @@
 {
     "development": {
         "#comment/current_edition": "current_edition has to start as zero, because it is also used as an index to the security key value.",
-        "ProxyAdmin": "0x81F4b94DEB3012B33E8f43F119Fe8293e041C6aa",
-        "StakeWarsCharacter": "0x96778c9eC8Ba6A8eD3612ab62e43d70E1D22FEe0",
-        "StakeWarsCharacterUpgradableProxy": "0x61BB0eD2E670BB064B5909Eb1d611378f022b11e",
-        "StakeWarsFactory": "0xEa9f6b1ffdB9985bE1ddEc1BCF0Ae69EaAB4462C",
-        "StakeWarsFactoryUpgradableProxy": "0x55A3Fe42f89C7AdF1081D3DEbbA0BD61aBc9Af17",
+        "ProxyAdmin": "0x78fBA24a305085C120a200Ad49Bdc8E737EaaAbc",
+        "StakeWarsCharacter": "0x817D0cfB1667C206daAB70848e2504d94a59B2e3",
+        "StakeWarsCharacterUpgradableProxy": "0xcc2a9B07CFa3adbe652Ce574413ab68886b4A75D",
+        "StakeWarsFactory": "0x1F86a450C5891e63e6Dc8d5737ddFeCB42E1d5bb",
+        "StakeWarsFactoryUpgradableProxy": "0x194A175b7f1915dd601c27BfB13C5Aa62E7eC86b",
         "current_edition": 0,
         "group_uris": {
             "-1": null
